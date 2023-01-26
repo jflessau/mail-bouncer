@@ -29,7 +29,7 @@ pub async fn send_mail(text: String) -> Result<()> {
             .build();
 
     if let Err(err) = mailer.send(email).await {
-        return Err(Error::InternalServer(format!("{}", err)));
+        return Err(Error::InternalServer(format!("{err}")));
     }
 
     Ok(())

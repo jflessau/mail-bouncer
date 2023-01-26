@@ -2,7 +2,7 @@
 
 REST service for CAPTCHA-protected email dispatching.
 
-**Use case:** You have a website with no backend code like one produced with a static site generator. You need to send an email e.g. when a user submits a form, etc.
+**Use case:** You have a website with no backend code like one produced with a static site generator. You need to send an email e.g. when a user submits a form.
 But you can't have your email credentials in the frontend for obvious reasons.
 
 ## Endpoints
