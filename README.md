@@ -11,7 +11,7 @@ But you can't have your email credentials in the frontend for obvious reasons.
 | ---------- | ------ | ---------------------------------------------------- | --------------------------------------- |
 | `/health`  | `GET`  |                                                      | `I'm ok.`                               |
 | `/captcha` | `GET`  |                                                      | ![CAPTCHA example](captcha-example.png) |
-| `/mail`    | `POST` | `{ "captcha_text": "cyc9ga", "mail_text": "Hi :)" }` | Status Code 200                         |
+| `/mail`    | `POST` | `{ "captchaText": "cyc9ga", "mailText": "Hi :)" }` | Status Code 200                         |
 
 ## Usage
 
