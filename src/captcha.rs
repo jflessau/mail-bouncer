@@ -68,7 +68,7 @@ impl Captchas {
             .apply_filter(Noise::new(0.2))
             .apply_filter(Wave::new(2.0, 8.0).horizontal())
             .apply_filter(Grid::new(9, 9))
-            .view(200, 100)
+            .view(200, 64)
             .as_png()
             .ok_or_else(|| Error::InternalServer("fails to build captcha image".to_string()))?;
 
@@ -86,14 +86,13 @@ impl Captchas {
 
     pub fn check(&mut self, text: String) -> Result<()> {
         if let Ok(mut captchas) = self.0.lock() {
-            if let Some(captcha) = captchas.get(&text.to_lowercase()) {
+            if let Some(captcha) = captchas.get(&text) {
                 if captcha.matches(&text) {
                     captchas.retain(|k, _| k != &text);
                     return Ok(());
                 }
-                return Err(Error::Unauthorized);
             }
-            return Err(Error::NotFound);
+            return Err(Error::Unauthorized);
         }
 
         Err(Error::InternalServer("fails to lock mutex".to_string()))

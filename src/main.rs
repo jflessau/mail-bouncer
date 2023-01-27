@@ -13,12 +13,15 @@ use axum::{
 };
 use dotenv::dotenv;
 use error::Result;
-use http::{header::CONTENT_TYPE, Method};
+use http::{
+    header::{HeaderValue, CONTENT_TYPE},
+    Method,
+};
 use serde::Deserialize;
 use std::{env, net::SocketAddr};
 use tower::ServiceBuilder;
 use tower_http::{
-    cors::CorsLayer,
+    cors::{AllowOrigin, CorsLayer},
     trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer},
     LatencyUnit,
 };
@@ -51,10 +54,20 @@ async fn main() {
         .parse::<u16>()
         .expect("invalid PORT");
 
+    let allowed_origins: String = env::var("CORS_ALLOWED_ORIGINS")
+        .expect("CORS_ALLOWED_ORIGINS not set")
+        .parse()
+        .expect("fails to parse CORS_ALLOWED_ORIGINS");
+
+    let allowed_origins = allowed_origins.split(',').into_iter().map(|v| {
+        HeaderValue::from_str(v).expect("fails to convert CORS_ALLOWED_ORIGINS to HeaderValue")
+    });
+
     let cors = CorsLayer::new()
         .allow_headers(vec![CONTENT_TYPE])
         .allow_credentials(true)
-        .allow_methods(vec![Method::GET, Method::POST]);
+        .allow_methods(vec![Method::GET, Method::POST])
+        .allow_origin(AllowOrigin::list(allowed_origins));
 
     let middleware_stack = ServiceBuilder::new()
         .layer(

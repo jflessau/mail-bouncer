@@ -7,11 +7,11 @@ But you can't have your email credentials in the frontend for obvious reasons.
 
 ## Endpoints
 
-| URL        | Method | Request Example                                            | Expected Response                       |
-| ---------- | ------ | ---------------------------------------------------------- | --------------------------------------- |
-| `/health`  | `GET`  |                                                            | `I'm ok.`                               |
-| `/captcha` | `GET`  |                                                            | ![CAPTCHA example](captcha-example.png) |
-| `/mail`    | `POST` | `{ "captcha_text": "cyc9ga", "mail_text": "Hello World" }` | Status Code 200                         |
+| URL        | Method | Request Example                                      | Expected Response                       |
+| ---------- | ------ | ---------------------------------------------------- | --------------------------------------- |
+| `/health`  | `GET`  |                                                      | `I'm ok.`                               |
+| `/captcha` | `GET`  |                                                      | ![CAPTCHA example](captcha-example.png) |
+| `/mail`    | `POST` | `{ "captcha_text": "cyc9ga", "mail_text": "Hi :)" }` | Status Code 200                         |
 
 ## Usage
 

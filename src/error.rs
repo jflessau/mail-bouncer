@@ -2,7 +2,6 @@
 pub enum Error {
     Unauthorized,
     BadRequest(String),
-    NotFound,
     InternalServer(String),
 }
 use axum::{
@@ -17,7 +16,6 @@ impl IntoResponse for Error {
         let (status, error_message) = match self {
             Error::Unauthorized => (StatusCode::UNAUTHORIZED, "Unauthorized".to_string()),
             Error::BadRequest(error) => (StatusCode::BAD_REQUEST, error),
-            Error::NotFound => (StatusCode::NOT_FOUND, "Not found".to_string()),
             Error::InternalServer(error) => {
                 tracing::error!("internal server error: {}", error);
                 (
