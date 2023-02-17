@@ -25,7 +25,7 @@ impl Captcha {
     }
 
     fn matches(&self, text: &str) -> bool {
-        !self.expired() && self.text == text.to_lowercase()
+        !self.expired() && self.text.to_lowercase() == text.to_lowercase()
     }
 
     fn expired(&self) -> bool {
