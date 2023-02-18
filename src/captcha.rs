@@ -9,6 +9,7 @@ use std::{
     fmt,
     sync::{Arc, Mutex},
 };
+use tracing::{info, warn};
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Captcha {
@@ -25,7 +26,7 @@ impl Captcha {
     }
 
     fn matches(&self, text: &str) -> bool {
-        !self.expired() && self.text.to_lowercase() == text.to_lowercase()
+        !self.expired() && self.text == text.to_lowercase()
     }
 
     fn expired(&self) -> bool {
@@ -64,6 +65,8 @@ impl Captchas {
             .collect::<String>()
             .to_lowercase();
 
+        info!("insert captcha: {}", text);
+
         let image = captcha
             .apply_filter(Noise::new(0.2))
             .apply_filter(Wave::new(2.0, 8.0).horizontal())
@@ -85,13 +88,19 @@ impl Captchas {
     }
 
     pub fn check(&mut self, text: String) -> Result<()> {
+        info!("check captcha: {}", text);
+
         if let Ok(mut captchas) = self.0.lock() {
-            if let Some(captcha) = captchas.get(&text) {
+            if let Some(captcha) = captchas.get(&text.to_lowercase()) {
                 if captcha.matches(&text) {
                     captchas.retain(|k, _| k != &text);
+
+                    info!("approved user provided captcha: {}", text);
                     return Ok(());
                 }
             }
+
+            warn!("wrong captcha: {}", text);
             return Err(Error::Unauthorized);
         }
 

@@ -4,8 +4,11 @@ use lettre::{
     Tokio1Executor,
 };
 use std::env;
+use tracing::{error, info};
 
 pub async fn send_mail(text: String) -> Result<()> {
+    info!("send mail with text: {}", text);
+
     let smtp_relay = env::var("SMTP_RELAY").unwrap();
     let smtp_user = env::var("SMTP_USER").unwrap();
     let smtp_password = env::var("SMTP_PASSWORD").unwrap();
@@ -29,6 +32,8 @@ pub async fn send_mail(text: String) -> Result<()> {
             .build();
 
     if let Err(err) = mailer.send(email).await {
+        error!("fails to send mail: {}", err);
+
         return Err(Error::InternalServer(format!("{err}")));
     }
 

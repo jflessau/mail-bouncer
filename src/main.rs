@@ -25,7 +25,7 @@ use tower_http::{
     trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer},
     LatencyUnit,
 };
-use tracing::warn;
+use tracing::{info, warn};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
@@ -132,6 +132,7 @@ async fn send_mail(
     }
 
     mail::send_mail(payload.mail_text).await?;
+    info!("mail sent successfully");
 
     Ok(())
 }
